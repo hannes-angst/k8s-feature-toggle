@@ -17,25 +17,33 @@ must have the same value for all instances and all instances must behave the sam
 ## keep the current state in memory
 No matter how fast the mechanism or technology might be, memory will always be quicker
 and tend to fail lesser than any external call.
-Another consideration is that if check the value on a per call rate,
-we will have a busy network that - given enough instances - will fail eventually. 
+
+Another consideration is, that if we check the feature toggle value on each call,
+we will have a busy network that - given enough instances - will fail eventually.
+
+ 
 But this comes with a price. We need to be sure that the cached value is up-to-date
 and if the synchronisation of the feature toggles fail, we should not longer accept requests. 
  
 ## Use existing mechanisms of the environment
 In a kubernetes cluster, just install helm and you can have databases, 
-distributed caching and whatnot ready to be rolled out. This is nice but
-you will find out, that not knowing the things you deploy in depth will
-ruin you days when it does not behave as you expect, or if it stops working at all.
-Event if you are an expert, maybe you do not want another thing to maintain,
-care or heal if it's broken.
+distributed caching and whatnot ready to be rolled out in no time. 
+
+This is nice but you will find out eventually, that not knowing the things you deploy in depth 
+will ruin your days when it does not behave as you expected, or if it stops working at all.
+
+Even if you are an expert, maybe you do not want another thing to maintain, care or heal if it's broken.
+
 So the aim of using already existing mechanisms of the environment is a limitation
 I happily check, before adding just another thing to a kubernetes cluster.
 
 # configMaps
 Kubernetes operates with a highly available, clustered data storage that goes under
 the name zook... ahm etcd. 
+
 If you look up the details it allows us to store 1 megabyte of payload per document. 
+This is good enough for us.
+
 Kubernetes allows us to query, update and watch data.
 
 So we are going with a configMap and watch its changes.
