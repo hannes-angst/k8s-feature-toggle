@@ -156,7 +156,7 @@ client.configMaps().inNamespace(namespace).withName(configMap).patch(<data>);
 I like a dev team members to get their hands dirty with kubernetes. So why provide a rest interface
 when you could just `kubectl edit cm feature-toggle` and flip the switch? 
 
-C. Why not use <your-company-product-here>?
+C. Why not use #your-company-product-here#?
 
 Feature toggle provide way more. If the switch is on or off can be decided based 
 on the machine, the customer, the time, the current resource consumption, the current load and whatnot.
