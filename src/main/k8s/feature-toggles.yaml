@@ -1,0 +1,10 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: feature-toggles
+data:
+  my-toggle: "false"
+  another-toggle: "false"
+  branch-toggle: "do-option-1"
+

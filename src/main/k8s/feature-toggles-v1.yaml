@@ -1,0 +1,128 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: template-v1-config
+data:
+  APP_ID: "feature-toggle-v1"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: feature-toggles-role
+  namespace: default
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - events
+    verbs:
+      - get
+      - watch
+      - view
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: global-feature-toggles-rolebinding
+  namespace: default
+subjects:
+  - kind: Group
+    name: system:serviceaccounts
+    apiGroup: rbac.authorization.k8s.io
+    namespace: default
+roleRef:
+  kind: Role
+  name: feature-toggles-role
+  apiGroup: ""
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: feature-toggles-role-binding
+  namespace: default
+  labels:
+    app: template-v1
+subjects:
+  - kind: ServiceAccount
+    name: feature-toggles-serviceaccount
+roleRef:
+  kind: Role
+  name: feature-toggles-role
+  apiGroup: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: template-v1
+  labels:
+    app: template-v1
+    type: service
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  minReadySeconds: 20
+  selector:
+    matchLabels:
+      app: template-v1
+  template:
+    metadata:
+      name: template-v1
+      labels:
+        app: template-v1
+        type: service
+    spec:
+      containers:
+        - name: template-v1
+          image: 321829701788.dkr.ecr.eu-central-1.amazonaws.com/template:1.0.19
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: 1G
+              cpu: 1
+            requests:
+              memory: 512Mi
+              cpu: 100m
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 180
+            periodSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          envFrom:
+            - configMapRef:
+                name: global-config
+            - configMapRef:
+                name: logging-config
+            - configMapRef:
+                name: template-v1-config
+          env:
+            - name: PORT
+              value: "8080"
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: template-v1
+spec:
+  selector:
+    app: template-v1
+  ports:
+    - name: template-v1-http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  sessionAffinity: None
+---
+#no Ingress
+
+

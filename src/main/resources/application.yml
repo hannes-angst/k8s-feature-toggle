@@ -1,0 +1,32 @@
+server:
+  port: ${PORT:8080}
+
+#
+# Application info
+#
+info:
+  name: ${spring.application.name}
+  app:
+    environment: ${spring.profiles.active:default}
+    name: "@project.name@"
+    version: "@project.version@"
+    description: "@project.description@"
+    apiName: feature-toggle
+    apiVersion: 1
+  build:
+    group: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    version: "@project.version@"
+    encoding: "@project.build.sourceEncoding@"
+    java: "@java.version@"
+    buildTime: "@build.timestamp@"
+
+spring:
+  application:
+    name: ${APP_ID:${info.app.apiName}-v${info.app.apiVersion}}
+  session:
+    store-type: none
+
+feature-toggles:
+  namespace: "default"
+  config-map: "feature-toggles"

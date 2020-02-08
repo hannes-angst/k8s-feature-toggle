@@ -1,0 +1,17 @@
+    _____
+  .'     `.
+ /         \
+|           |
+'.  +^^^+  .'
+  `. \./ .'
+    |_|_|
+    (___)
+    (___)  jgs
+    `---'
+
+ :: Spring Boot  ::  ${spring-boot.version}
+ :: Application  ::  ${spring.application.name} (v${info.build.version})
+ :: Name         ::  ${info.app.name}
+ :: Environment  ::  ${info.app.environment}
+ :: Build time   ::  ${info.build.buildTime}
+ :: Java         ::  built on ${info.build.java} running on ${java.version}
