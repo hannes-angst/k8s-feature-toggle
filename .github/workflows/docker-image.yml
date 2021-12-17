@@ -51,3 +51,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/k8s-feature-toggle:buildcache
+          cache-to: type=registry,ref=docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/k8s-feature-toggle:buildcache,mode=max
