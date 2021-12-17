@@ -1,14 +1,14 @@
-FROM maven:3.8.4-openjdk-11 as builder
+FROM maven:3.8-openjdk-11 as builder
 WORKDIR /build
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN mvn -e -B dependency:go-offline
 
 COPY . /build/
 
 #
 # build source
 #
-RUN mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn clean verify
+RUN mvn -e -B clean verify
 
 FROM adoptopenjdk/openjdk11:x86_64-alpine-jre-11.0.13_8 as assembly
 
