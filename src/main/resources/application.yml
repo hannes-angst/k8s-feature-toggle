@@ -1,5 +1,6 @@
 server:
   port: ${PORT:8080}
+  shutdown: graceful
 
 #
 # Application info
@@ -26,7 +27,15 @@ spring:
     name: ${APP_ID:${info.app.apiName}-v${info.app.apiVersion}}
   session:
     store-type: none
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
 
 feature-toggles:
   namespace: "default"
   config-map: "feature-toggles"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics, health

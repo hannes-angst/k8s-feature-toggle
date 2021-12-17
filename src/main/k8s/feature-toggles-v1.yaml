@@ -2,7 +2,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: template-v1-config
+  name: feature-toggle-v1-config
 data:
   APP_ID: "feature-toggle-v1"
 ---
@@ -20,7 +20,7 @@ rules:
     verbs:
       - get
       - watch
-      - view
+      - list
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -43,7 +43,7 @@ metadata:
   name: feature-toggles-role-binding
   namespace: default
   labels:
-    app: template-v1
+    app: feature-toggle-v1
 subjects:
   - kind: ServiceAccount
     name: feature-toggles-serviceaccount
@@ -55,9 +55,9 @@ roleRef:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: template-v1
+  name: feature-toggle-v1
   labels:
-    app: template-v1
+    app: feature-toggle-v1
     type: service
 spec:
   replicas: 1
@@ -65,45 +65,41 @@ spec:
   minReadySeconds: 20
   selector:
     matchLabels:
-      app: template-v1
+      app: feature-toggle-v1
   template:
     metadata:
-      name: template-v1
+      name: feature-toggle-v1
       labels:
-        app: template-v1
+        app: feature-toggle-v1
         type: service
     spec:
       containers:
-        - name: template-v1
-          image: 321829701788.dkr.ecr.eu-central-1.amazonaws.com/template:1.0.19
+        - name: feature-toggle-v1
+          image: hangst/k8s-feature-toggle:1.0.0
           ports:
             - containerPort: 8080
           resources:
             limits:
               memory: 1G
-              cpu: 1
+              cpu: 1000m
             requests:
               memory: 512Mi
               cpu: 100m
           livenessProbe:
             httpGet:
-              path: /health
+              path: /actuator/health/liveness
               port: 8080
             initialDelaySeconds: 180
             periodSeconds: 60
           readinessProbe:
             httpGet:
-              path: /
+              path: /actuator/health/readiness
               port: 8080
-            initialDelaySeconds: 10
+            initialDelaySeconds: 60
             periodSeconds: 10
           envFrom:
             - configMapRef:
-                name: global-config
-            - configMapRef:
-                name: logging-config
-            - configMapRef:
-                name: template-v1-config
+                name: feature-toggle-v1-config
           env:
             - name: PORT
               value: "8080"
@@ -112,17 +108,14 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: template-v1
+  name: feature-toggle-v1
 spec:
   selector:
-    app: template-v1
+    app: feature-toggle-v1
   ports:
-    - name: template-v1-http
+    - name: feature-toggle-v1-http
       protocol: TCP
       port: 80
       targetPort: 8080
   sessionAffinity: None
 ---
-#no Ingress
-
-

@@ -1,6 +1,7 @@
 package cloud.angst.k8s.featuretoggle.config.k8s;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public interface FeatureToggle {
    * Detached copy of the current configuration
    */
   @NotNull
+  @Unmodifiable
   Map<String, String> getToggles();
 
   /**
