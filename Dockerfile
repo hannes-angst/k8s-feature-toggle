@@ -39,8 +39,19 @@ FROM updates
 LABEL maintainer="Hannes Angst"
 
 COPY --from=assembly --chown=javarun:javarun application/dependencies/           ./home/javarun
+# This is a workaround to https://github.com/moby/moby/issues/37965
+RUN true
+
 COPY --from=assembly --chown=javarun:javarun application/spring-boot-loader/     ./home/javarun
+
+# This is a workaround to https://github.com/moby/moby/issues/37965
+RUN true
+
 COPY --from=assembly --chown=javarun:javarun application/snapshot-dependencies/  ./home/javarun
+
+# This is a workaround to https://github.com/moby/moby/issues/37965
+RUN true
+
 COPY --from=assembly --chown=javarun:javarun application/application/            ./home/javarun
 
 ENV PORT=${PORT}
