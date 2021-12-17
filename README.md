@@ -80,13 +80,12 @@ We just will interpret the value as `on` and `off`.
 |"-"         |
 
 # Demo
-This demo provides a swagger interface to switch the feature toggles. 
 A recurring task will log the current state of `my-toggle` every 5 seconds.
 
 
-# Run
+## Run
 
-ß. Deploy the configMap
+0. Deploy the configMap
 
 `kubectl apply -f feature-toggles.yaml`
 

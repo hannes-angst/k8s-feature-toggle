@@ -36,7 +36,7 @@ RUN addgroup -g ${PGID} javarun && \
 
 FROM updates
 
-LABEL maintainer="digital-fulfillment@porsche.de"
+LABEL maintainer="Hannes Angst"
 
 COPY --from=assembly --chown=javarun:javarun application/dependencies/           ./home/javarun
 COPY --from=assembly --chown=javarun:javarun application/spring-boot-loader/     ./home/javarun
