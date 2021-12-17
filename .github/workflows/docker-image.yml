@@ -30,8 +30,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            name/app
-            ghcr.io/username/app
+            docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/k8s-feature-toggle
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
