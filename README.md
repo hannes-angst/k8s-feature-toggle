@@ -80,7 +80,6 @@ We just will interpret the value as `on` and `off`.
 |"-"         |
 
 # Demo
-This demo provides a swagger interface to switch the feature toggles. 
 A recurring task will log the current state of `my-toggle` every 5 seconds.
 
 
