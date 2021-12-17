@@ -1,14 +1,11 @@
-name: Docker Image CI
+name: Publish Container
 
 on:
   push:
     branches: 
-      - 'master'
+      - 'main'
     tags:
        - 'v*'
-  pull_request:
-    branches: 
-      - 'master'
 
 jobs:
   build:
